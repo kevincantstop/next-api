@@ -21,6 +21,7 @@ const User = sequelize.define('User', {
     },
     meta: {
         type: DataTypes.JSON,
+        defaultValue: {}
     }
 });
 
@@ -56,6 +57,7 @@ const Post = sequelize.define('Post', {
     },
     meta: {
         type: DataTypes.JSON,
+        defaultValue: {}
     },
     slug: {
         type: DataTypes.STRING,
@@ -75,6 +77,7 @@ const Comment = sequelize.define('Comment', {
     },
     meta: {
         type: DataTypes.JSON,
+        defaultValue: {}
     }
 })
 
@@ -91,6 +94,7 @@ const Option = sequelize.define('Option', {
     value: {
         type: DataTypes.JSON,
         allowNull: false,
+        defaultValue: {}
     }
 })
 
@@ -106,15 +110,11 @@ Comment.belongsTo(User, { foreignKey: 'authorId', constraints: false})
 Category.belongsToMany(Post, { through: 'Post_Category', foreignKey: 'categoryId', constraints: false })
 Post.belongsToMany(Category, { through: 'Post_Category', foreignKey: 'postId', constraints: false })
 
-const sync = async () => {
-    await sequelize.sync({ force: true })
-}
-
 module.exports = {
     User,
     Category,
     Post,
     Comment,
     Option,
-    sync
+    sync: () => sequelize.sync({ force: true })
 }
