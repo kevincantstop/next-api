@@ -21,8 +21,7 @@ export const POST = async (req) => {
         return json({ message: `Author: ${data.authorId} not found.` }, 404);
     }
 
-    let cats = await Promise.all(categories.map(Category.findByPk));
-    cats = cats.filter(c => c);
+    const cats = (await Promise.all(categories.map(Category.findByPk))).filter(c => c);
     if (cats.length === 0) {
         return json({ message: `No categories found` }, 404);
     }
