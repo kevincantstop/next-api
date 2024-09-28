@@ -28,9 +28,7 @@ export const POST = async (req) => {
     }
 
     const post = await Post.create(data);
-    for(const category in cats) {
-        await post.setCategory(category)
-    }
+    await Promise.all(cats.map(post.setCategory))
 
     return json(post);
 }
