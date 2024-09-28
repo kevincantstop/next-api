@@ -21,11 +21,28 @@ const User = sequelize.define('User', {
     }
 });
 
+const Category = sequelize.define('Category', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    slug: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
+})
+
 const sync = async () => {
     await sequelize.sync({ force: true })
 }
 
 module.exports = {
     User,
+    Category,
     sync
 }

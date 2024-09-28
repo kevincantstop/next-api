@@ -29,12 +29,14 @@ export const PATCH = async (req) => {
 }
 
 export const DELETE = async (req) => {
-    const body = await req.json();
-    const user = await User.findByPk(body.id)
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id")
+
+    const user = await User.findByPk(id)
 
     if (user) {
-        await User.destroy({ where: { id: body.id } })
+        await User.destroy({ where: { id: user.id } })
         return json({ ok: true })
     }
-    return json({ message: `User: ${body.id} not found` }, 404)
+    return json({ message: `User: ${id} not found` }, 404)
 }
