@@ -63,8 +63,45 @@ const Post = sequelize.define('Post', {
     }
 })
 
+const Comment = sequelize.define('Comment', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    content: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
+    meta: {
+        type: DataTypes.JSON,
+    }
+})
+
+const Option = sequelize.define('Option', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    key: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    value: {
+        type: DataTypes.JSON,
+        allowNull: false,
+    }
+})
+
 User.hasMany(Post, { foreignKey: 'authorId' })
 Post.belongsTo(User, { foreignKey: 'authorId', constraints: false})
+
+Post.hasMany(Comment, { foreignKey: 'postId' })
+Comment.belongsTo(Post, { foreignKey: 'postId', constraints: false})
+
+User.hasMany(Comment, { foreignKey: 'authorId' })
+Comment.belongsTo(User, { foreignKey: 'authorId', constraints: false})
 
 Category.belongsToMany(Post, { through: 'Post_Category', foreignKey: 'categoryId', constraints: false })
 Post.belongsToMany(Category, { through: 'Post_Category', foreignKey: 'postId', constraints: false })
@@ -77,5 +114,7 @@ module.exports = {
     User,
     Category,
     Post,
+    Comment,
+    Option,
     sync
 }
