@@ -122,8 +122,8 @@ Comment.belongsTo(Post, { foreignKey: 'postId', constraints: false})
 User.hasMany(Comment, { foreignKey: 'authorId' })
 Comment.belongsTo(User, { foreignKey: 'authorId', constraints: false})
 
-Category.hasMany(Post, { foreignKey: 'categoryId', constraints: false })
-Post.belongsTo(Category, { foreignKey: 'categoryId', constraints: false })
+Category.belongsToMany(Post, { through: 'Post_Category', foreignKey: 'categoryId', constraints: false })
+Post.belongsToMany(Category, { through: 'Post_Category', foreignKey: 'postId', constraints: false })
 
 module.exports = {
     User,
