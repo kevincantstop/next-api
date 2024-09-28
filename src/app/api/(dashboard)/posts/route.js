@@ -7,26 +7,30 @@ export const GET = async () => {
 }
 
 export const POST = async (req) => {
-    const body = await req.json();
-    const associate = {};
+    const { categories, data } = await req.json();
 
-    if (body.authorId) {
-        const user = await User.findByPk(body.authorId)
-        if (user == null) {
-            return json({ message: `Author: ${body.authorId} not found.` }, 404);
-        }
-        associate.user = user;
+    if (!data.authorId) {
+        return json({ message: `AuthorId is empty`, ok: false })
+    }
+    if (!categories || categories.length === 0) {
+        return json({ message: `Categories not assigned`, ok: false })
     }
 
-    if (body.categoryId) {
-        const category = await Category.findByPk(body.categoryId)
-        if (category == null) {
-            return json({ message: `Category: ${body.categoryId} not found.` }, 404);
-        }
-        associate.category = category;
+    const user = await User.findByPk(data.authorId);
+    if (user == null) {
+        return json({ message: `Author: ${data.authorId} not found.` }, 404);
     }
 
-    const post = await Post.create(body);
+    let cats = await Promise.all(categories.map(Category.findByPk));
+    cats = cats.filter(c => c);
+    if (cats.length === 0) {
+        return json({ message: `No categories found` }, 404);
+    }
+
+    const post = await Post.create(data);
+    for(const category in cats) {
+        await post.setCategory(category)
+    }
 
     return json(post);
 }
