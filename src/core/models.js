@@ -19,6 +19,11 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    status: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1, // 0: inactive 1: active
+    },
     meta: {
         type: DataTypes.JSON,
         defaultValue: {}
@@ -62,6 +67,11 @@ const Post = sequelize.define('Post', {
     slug: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    status: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0, // 0: drafted 1: published
     }
 })
 
@@ -78,6 +88,11 @@ const Comment = sequelize.define('Comment', {
     meta: {
         type: DataTypes.JSON,
         defaultValue: {}
+    },
+    status: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1, // 0: invisible 1: visible
     }
 })
 
