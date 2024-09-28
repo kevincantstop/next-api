@@ -64,10 +64,10 @@ const Post = sequelize.define('Post', {
 })
 
 User.hasMany(Post, { foreignKey: 'authorId' })
-Post.belongsTo(User, { foreignKey: 'authorId' })
+Post.belongsTo(User, { foreignKey: 'authorId', constraints: false})
 
-Category.belongsToMany(Post, { through: 'Post_Category', foreignKey: 'categoryId' })
-Post.belongsToMany(Category, { through: 'Post_Category', foreignKey: 'postId' })
+Category.belongsToMany(Post, { through: 'Post_Category', foreignKey: 'categoryId', constraints: false })
+Post.belongsToMany(Category, { through: 'Post_Category', foreignKey: 'postId', constraints: false })
 
 const sync = async () => {
     await sequelize.sync({ force: true })
