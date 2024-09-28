@@ -11,13 +11,16 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    username: {
+    name: {
         type: DataTypes.STRING,
         allowNull: false
     },
     password: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    meta: {
+        type: DataTypes.JSON,
     }
 });
 
@@ -27,7 +30,7 @@ const Category = sequelize.define('Category', {
         autoIncrement: true,
         primaryKey: true,
     },
-    title: {
+    name: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -37,6 +40,35 @@ const Category = sequelize.define('Category', {
     }
 })
 
+const Post = sequelize.define('Post', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    content: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
+    meta: {
+        type: DataTypes.JSON,
+    },
+    slug: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
+})
+
+User.hasMany(Post, { foreignKey: 'authorId' })
+Post.belongsTo(User, { foreignKey: 'authorId' })
+
+Category.belongsToMany(Post, { through: 'Post_Category', foreignKey: 'categoryId' })
+Post.belongsToMany(Category, { through: 'Post_Category', foreignKey: 'postId' })
+
 const sync = async () => {
     await sequelize.sync({ force: true })
 }
@@ -44,5 +76,6 @@ const sync = async () => {
 module.exports = {
     User,
     Category,
+    Post,
     sync
 }
